@@ -1,11 +1,15 @@
+
 # C# SSH VPN
 
 ## Description : 
 A program to use SSH protocol as a VPN, it works simply by start SSH session on port 9000 and set local ip in windows proxy...
 
 ## Screenshots : 
-![image](https://github.com/omidmousavi/CSharp-SSH-VPN/assets/67155909/9f18489e-afc5-4bb9-b5af-3fcfde7dc1dd)
-![image](https://github.com/omidmousavi/CSharp-SSH-VPN/assets/67155909/6e448a64-789b-4ceb-a429-9b8a0f30cf5d)
+![image](https://github.com/omidmousavi/CSharp-SSH-VPN/assets/67155909/08490916-3fe0-4e06-8e95-50c43a6b780b)
+![image](https://github.com/omidmousavi/CSharp-SSH-VPN/assets/67155909/4bcf0f85-07d3-43af-a6dc-5db175e3f09f)
+
+
+
 
 
 ## Download compiled exe : 

@@ -35,9 +35,17 @@ namespace ssh_vpn
 
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey(keyName))
             {
-                ip = key.GetValue("ip") as string;
-                username = key.GetValue("username") as string;
-                password = key.GetValue("password") as string;
+                if (key == null)
+                {
+                    MessageBox.Show("Error : You should set SSH server settings...", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                else
+                {
+                    ip = key.GetValue("ip") as string;
+                    username = key.GetValue("username") as string;
+                    password = key.GetValue("password") as string;
+                }
             }
 
             sshClient = new SshClient(ip, username, password);

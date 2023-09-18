@@ -40,9 +40,12 @@ namespace ssh_vpn
             string keyName = "ssh_vpn";
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey(keyName))
             {
-                txt_ip.Text = key.GetValue("ip") as string;
-                txt_username.Text = key.GetValue("username") as string;
-                txt_password.Text = key.GetValue("password") as string;
+                if (key != null)
+                {
+                    txt_ip.Text = key.GetValue("ip") as string;
+                    txt_username.Text = key.GetValue("username") as string;
+                    txt_password.Text = key.GetValue("password") as string;
+                }
             }
         }
     }

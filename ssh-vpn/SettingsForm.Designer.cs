@@ -36,6 +36,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.txt_password = new System.Windows.Forms.TextBox();
             this.btn_save = new System.Windows.Forms.Button();
+            this.chbox_set_proxy = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // txt_ip
@@ -88,7 +89,7 @@
             // 
             // btn_save
             // 
-            this.btn_save.Location = new System.Drawing.Point(12, 102);
+            this.btn_save.Location = new System.Drawing.Point(15, 132);
             this.btn_save.Name = "btn_save";
             this.btn_save.Size = new System.Drawing.Size(260, 39);
             this.btn_save.TabIndex = 6;
@@ -96,12 +97,25 @@
             this.btn_save.UseVisualStyleBackColor = true;
             this.btn_save.Click += new System.EventHandler(this.btn_save_Click);
             // 
+            // chbox_set_proxy
+            // 
+            this.chbox_set_proxy.AutoSize = true;
+            this.chbox_set_proxy.Checked = true;
+            this.chbox_set_proxy.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chbox_set_proxy.Location = new System.Drawing.Point(15, 99);
+            this.chbox_set_proxy.Name = "chbox_set_proxy";
+            this.chbox_set_proxy.Size = new System.Drawing.Size(260, 17);
+            this.chbox_set_proxy.TabIndex = 7;
+            this.chbox_set_proxy.Text = "Automatic set windows proxy (Default = Checked)";
+            this.chbox_set_proxy.UseVisualStyleBackColor = true;
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(286, 157);
+            this.ClientSize = new System.Drawing.Size(286, 183);
+            this.Controls.Add(this.chbox_set_proxy);
             this.Controls.Add(this.btn_save);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.txt_password);
@@ -128,5 +142,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txt_password;
         private System.Windows.Forms.Button btn_save;
+        private System.Windows.Forms.CheckBox chbox_set_proxy;
     }
 }

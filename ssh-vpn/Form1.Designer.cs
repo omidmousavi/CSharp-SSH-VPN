@@ -37,6 +37,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.opensettingsform = new System.Windows.Forms.Button();
             this.timer_check_status = new System.Windows.Forms.Timer(this.components);
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -112,6 +113,11 @@
             this.timer_check_status.Interval = 1000;
             this.timer_check_status.Tick += new System.EventHandler(this.timer_check_status_Tick);
             // 
+            // notifyIcon1
+            // 
+            this.notifyIcon1.Text = "SSH VPN NOTIF";
+            this.notifyIcon1.Visible = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -144,6 +150,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button opensettingsform;
         private System.Windows.Forms.Timer timer_check_status;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
     }
 }
 

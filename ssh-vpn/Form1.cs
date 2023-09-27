@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using Renci.SshNet;
+using System.Management;
 
 namespace ssh_vpn
 {
@@ -22,6 +23,8 @@ namespace ssh_vpn
 
         SshClient sshClient = new SshClient("0.0.0.0","0000","0000");
         ForwardedPortDynamic portForwarded = new ForwardedPortDynamic(9000);
+
+        bool set_proxy = true;
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -45,6 +48,7 @@ namespace ssh_vpn
                     ip = key.GetValue("ip") as string;
                     username = key.GetValue("username") as string;
                     password = key.GetValue("password") as string;
+                    set_proxy = Convert.ToBoolean(key.GetValue("set_proxy") as string);
                 }
             }
 
@@ -55,10 +59,13 @@ namespace ssh_vpn
                 sshClient.Connect();
                 sshClient.AddForwardedPort(portForwarded);
                 portForwarded.Start();
-                
-                RegistryKey registry = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", true);
-                registry.SetValue("ProxyEnable", 1);
-                registry.SetValue("ProxyServer", "socks5://127.0.0.1:9000");
+
+                if (set_proxy)
+                {
+                    RegistryKey registry = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", true);
+                    registry.SetValue("ProxyEnable", 1);
+                    registry.SetValue("ProxyServer", "socks5://127.0.0.1:9000");   
+                }
 
                 Cursor.Current = Cursors.Default;
                 button3.Enabled = true;
@@ -86,18 +93,26 @@ namespace ssh_vpn
 
         private void button3_Click(object sender, EventArgs e)
         {
+            Cursor.Current = Cursors.WaitCursor;
+
             portForwarded.Stop();
             sshClient.Disconnect();
 
-            RegistryKey registry = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", true);
-            registry.SetValue("ProxyEnable", 0);
-            registry.SetValue("ProxyServer", "");
+            button1.Text = "Connect";
+
+            if (set_proxy)
+            {
+                RegistryKey registry = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", true);
+                registry.SetValue("ProxyEnable", 0);
+                registry.SetValue("ProxyServer", "");   
+            }
 
             button1.Enabled = true;
             button3.Enabled = false;
 
             panel1.BackColor = Color.Red;
             label1.Text = "Not connected";
+            Cursor.Current = Cursors.Default;
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -123,6 +138,9 @@ namespace ssh_vpn
         }
 
         bool back_status = false;
+        
+        int seconds = 0;
+
         private void timer_check_status_Tick(object sender, EventArgs e)
         {
 
@@ -141,6 +159,27 @@ namespace ssh_vpn
 
                 panel1.BackColor = Color.Red;
                 label1.Text = "Not connected";
+
+                button1.Text = "Connect";
+
+                notifyIcon1.BalloonTipText = "SSH VPN Disconected...";
+                notifyIcon1.BalloonTipTitle = "";
+                notifyIcon1.Icon = SystemIcons.Warning;
+                notifyIcon1.ShowBalloonTip(10);
+            }
+            else if (sshClient.IsConnected && sshClient.IsConnected != back_status)
+            {
+                seconds = 0;
+                button1.Text = "00:00:00";
+            }
+            else if (sshClient.IsConnected)
+            {
+                seconds++;
+
+                int hours = seconds / 3600;
+                int minutes = (seconds % 3600) / 60;
+                int remainingSeconds = seconds % 60;
+                button1.Text = hours.ToString("D2") + ":" + minutes.ToString("D2") + ":" + remainingSeconds.ToString("D2");
             }
 
             back_status = sshClient.IsConnected;

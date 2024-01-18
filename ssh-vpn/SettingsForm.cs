@@ -26,7 +26,6 @@ namespace ssh_vpn
                 key.SetValue("ip", txt_ip.Text);
                 key.SetValue("username", txt_username.Text);
                 key.SetValue("password", txt_password.Text);
-                key.SetValue("set_proxy", chbox_set_proxy.Checked.ToString());
 
                 MessageBox.Show("Successfully saved.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -42,7 +41,6 @@ namespace ssh_vpn
                     txt_ip.Text = key.GetValue("ip") as string;
                     txt_username.Text = key.GetValue("username") as string;
                     txt_password.Text = key.GetValue("password") as string;
-                    chbox_set_proxy.Checked = Convert.ToBoolean(key.GetValue("set_proxy") as string);
                 }
             }
         }

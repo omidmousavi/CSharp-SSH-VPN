@@ -24,33 +24,21 @@ namespace ssh_vpn
         SshClient sshClient = new SshClient("0.0.0.0","0000","0000");
         ForwardedPortDynamic portForwarded = new ForwardedPortDynamic(9000);
 
-        bool set_proxy = true;
-
-        private void button1_Click(object sender, EventArgs e)
+        private void btnConnect_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
-
-            string keyName = "ssh_vpn";
             
-            string password = "";
-            string username = "";
-            string ip = "";
+            btnConnect.Text = "Connecting...";
 
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(keyName))
+            string password = registery_get_data("password");
+            string username = registery_get_data("username");
+            string ip = registery_get_data("ip");
+
+            if (password == "" || password == "" || ip == "")
             {
-                if (key == null)
-                {
-                    MessageBox.Show("Error : You should set SSH server settings...", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                else
-                {
-                    ip = key.GetValue("ip") as string;
-                    username = key.GetValue("username") as string;
-                    password = key.GetValue("password") as string;
-                    set_proxy = Convert.ToBoolean(key.GetValue("set_proxy") as string);
-                }
-            }
+                MessageBox.Show("Error : You should set SSH server settings...", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }          
 
             sshClient = new SshClient(ip, username, password);
 
@@ -60,16 +48,12 @@ namespace ssh_vpn
                 sshClient.AddForwardedPort(portForwarded);
                 portForwarded.Start();
 
-                if (set_proxy)
-                {
-                    RegistryKey registry = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", true);
-                    registry.SetValue("ProxyEnable", 1);
-                    registry.SetValue("ProxyServer", "socks5://127.0.0.1:9000");   
-                }
+                set_windows_proxy();
 
                 Cursor.Current = Cursors.Default;
+
                 button3.Enabled = true;
-                button1.Enabled = false;
+                btnConnect.Enabled = false;
 
                 panel1.BackColor = Color.Green;
                 label1.Text = "   Connected";
@@ -77,41 +61,27 @@ namespace ssh_vpn
             catch (Exception ex)
             {
                 MessageBox.Show("Error : " + ex);
+                btnConnect.Text = "Connect";
             }
         }
 
-
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            linkLabel1.LinkVisited = true;
-            linkLabel1.LinkBehavior = LinkBehavior.HoverUnderline;
-            linkLabel1.Links[0].LinkData = "https://github.com/omidmousavi/csharp-ssh-vpn";
-
-            // Open the URL in the default web browser
-            System.Diagnostics.Process.Start(linkLabel1.Links[0].LinkData.ToString());
-        }
-
-        private void button3_Click(object sender, EventArgs e)
+        private void btnDisconnect_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
 
             portForwarded.Stop();
             sshClient.Disconnect();
 
-            button1.Text = "Connect";
+            btnConnect.Text = "Connect";
 
-            if (set_proxy)
-            {
-                RegistryKey registry = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", true);
-                registry.SetValue("ProxyEnable", 0);
-                registry.SetValue("ProxyServer", "");   
-            }
+            unset_windows_proxy();
 
-            button1.Enabled = true;
+            btnConnect.Enabled = true;
             button3.Enabled = false;
 
             panel1.BackColor = Color.Red;
             label1.Text = "Not connected";
+
             Cursor.Current = Cursors.Default;
         }
 
@@ -126,7 +96,7 @@ namespace ssh_vpn
                 }
                 else
                 {
-                    button3_Click(null, null);
+                    btnConnect_Click(null, null);
                 }
             }
         }
@@ -137,10 +107,18 @@ namespace ssh_vpn
             SettingsForm.Show();
         }
 
-        bool back_status = false;
-        
-        int seconds = 0;
+        private void githubLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            githubLink.LinkVisited = true;
+            githubLink.LinkBehavior = LinkBehavior.HoverUnderline;
+            githubLink.Links[0].LinkData = "https://github.com/omidmousavi/csharp-ssh-vpn";
 
+            // Open the URL in the default web browser
+            System.Diagnostics.Process.Start(githubLink.Links[0].LinkData.ToString());
+        }
+
+        bool back_status = false;
+        int seconds = 0;
         private void timer_check_status_Tick(object sender, EventArgs e)
         {
 
@@ -150,17 +128,15 @@ namespace ssh_vpn
                 portForwarded.Stop();
                 sshClient.Disconnect();
 
-                RegistryKey registry = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", true);
-                registry.SetValue("ProxyEnable", 0);
-                registry.SetValue("ProxyServer", "");
+                unset_windows_proxy();
 
-                button1.Enabled = true;
+                btnConnect.Enabled = true;
                 button3.Enabled = false;
 
                 panel1.BackColor = Color.Red;
                 label1.Text = "Not connected";
 
-                button1.Text = "Connect";
+                btnConnect.Text = "Connect";
 
                 notifyIcon1.BalloonTipText = "SSH VPN Disconected...";
                 notifyIcon1.BalloonTipTitle = "";
@@ -170,7 +146,7 @@ namespace ssh_vpn
             else if (sshClient.IsConnected && sshClient.IsConnected != back_status)
             {
                 seconds = 0;
-                button1.Text = "00:00:00";
+                btnConnect.Text = "00:00:00";
             }
             else if (sshClient.IsConnected)
             {
@@ -179,10 +155,52 @@ namespace ssh_vpn
                 int hours = seconds / 3600;
                 int minutes = (seconds % 3600) / 60;
                 int remainingSeconds = seconds % 60;
-                button1.Text = hours.ToString("D2") + ":" + minutes.ToString("D2") + ":" + remainingSeconds.ToString("D2");
+                btnConnect.Text = hours.ToString("D2") + ":" + minutes.ToString("D2") + ":" + remainingSeconds.ToString("D2");
             }
 
             back_status = sshClient.IsConnected;
         }
+
+        private void set_windows_proxy()
+        {
+            RegistryKey registry = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", true);
+            registry.SetValue("ProxyEnable", 1);
+            registry.SetValue("ProxyServer", "socks5://127.0.0.1:9000");
+
+            WinINetInterop.InternetSetOption(IntPtr.Zero, WinINetInterop.INTERNET_OPTION_SETTINGS_CHANGED, IntPtr.Zero, 0);
+            WinINetInterop.InternetSetOption(IntPtr.Zero, WinINetInterop.INTERNET_OPTION_REFRESH, IntPtr.Zero, 0);
+        }
+
+        private void unset_windows_proxy()
+        {
+            RegistryKey registry = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", true);
+            registry.SetValue("ProxyEnable", 0);
+            registry.SetValue("ProxyServer", "");
+        }
+
+        private string registery_get_data(string name)
+        {
+            string keyName = "ssh_vpn";
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(keyName))
+            {
+                if (key == null)
+                {
+                    return "";
+                }
+                else
+                {
+                    return key.GetValue(name) as string;                    
+                }
+            }            
+        }
+    }
+
+    public static class WinINetInterop
+    {
+        public const int INTERNET_OPTION_SETTINGS_CHANGED = 39;
+        public const int INTERNET_OPTION_REFRESH = 37;
+
+        [System.Runtime.InteropServices.DllImport("wininet.dll", SetLastError = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        public static extern bool InternetSetOption(IntPtr hInternet, int dwOption, IntPtr lpBuffer, int lpdwBufferLength);
     }
 }

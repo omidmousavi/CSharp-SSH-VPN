@@ -23,5 +23,13 @@ E:\Final Projects\C# Projects\ssh-vpn\ssh-vpn\obj\Debug\ssh_vpn.Properties.Resou
 E:\Final Projects\C# Projects\ssh-vpn\ssh-vpn\obj\Debug\ssh_vpn.SettingsForm.resources
 E:\Final Projects\C# Projects\ssh-vpn\ssh-vpn\obj\Debug\ssh-vpn.csproj.GenerateResource.Cache
 E:\Final Projects\C# Projects\CSharp-SSH-VPN\ssh-vpn\bin\Debug\ssh-vpn.exe.config
+E:\Final Projects\C# Projects\CSharp-SSH-VPN\ssh-vpn\bin\Debug\ssh-vpn.exe
+E:\Final Projects\C# Projects\CSharp-SSH-VPN\ssh-vpn\bin\Debug\ssh-vpn.pdb
+E:\Final Projects\C# Projects\CSharp-SSH-VPN\ssh-vpn\bin\Debug\Renci.SshNet.dll
+E:\Final Projects\C# Projects\CSharp-SSH-VPN\ssh-vpn\bin\Debug\Renci.SshNet.xml
+E:\Final Projects\C# Projects\CSharp-SSH-VPN\ssh-vpn\obj\Debug\ssh_vpn.Form1.resources
+E:\Final Projects\C# Projects\CSharp-SSH-VPN\ssh-vpn\obj\Debug\ssh_vpn.Properties.Resources.resources
+E:\Final Projects\C# Projects\CSharp-SSH-VPN\ssh-vpn\obj\Debug\ssh_vpn.SettingsForm.resources
+E:\Final Projects\C# Projects\CSharp-SSH-VPN\ssh-vpn\obj\Debug\ssh-vpn.csproj.GenerateResource.Cache
 E:\Final Projects\C# Projects\CSharp-SSH-VPN\ssh-vpn\obj\Debug\ssh-vpn.exe
 E:\Final Projects\C# Projects\CSharp-SSH-VPN\ssh-vpn\obj\Debug\ssh-vpn.pdb

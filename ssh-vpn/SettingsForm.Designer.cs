@@ -36,6 +36,9 @@
             this.label3 = new System.Windows.Forms.Label();
             this.txt_password = new System.Windows.Forms.TextBox();
             this.btn_save = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txt_port = new System.Windows.Forms.NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_port)).BeginInit();
             this.SuspendLayout();
             // 
             // txt_ip
@@ -57,7 +60,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 41);
+            this.label2.Location = new System.Drawing.Point(12, 68);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(64, 13);
             this.label2.TabIndex = 3;
@@ -65,7 +68,7 @@
             // 
             // txt_username
             // 
-            this.txt_username.Location = new System.Drawing.Point(85, 38);
+            this.txt_username.Location = new System.Drawing.Point(85, 65);
             this.txt_username.Name = "txt_username";
             this.txt_username.Size = new System.Drawing.Size(187, 20);
             this.txt_username.TabIndex = 2;
@@ -73,7 +76,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 67);
+            this.label3.Location = new System.Drawing.Point(12, 94);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(62, 13);
             this.label3.TabIndex = 5;
@@ -81,14 +84,14 @@
             // 
             // txt_password
             // 
-            this.txt_password.Location = new System.Drawing.Point(85, 64);
+            this.txt_password.Location = new System.Drawing.Point(85, 91);
             this.txt_password.Name = "txt_password";
             this.txt_password.Size = new System.Drawing.Size(187, 20);
             this.txt_password.TabIndex = 4;
             // 
             // btn_save
             // 
-            this.btn_save.Location = new System.Drawing.Point(12, 99);
+            this.btn_save.Location = new System.Drawing.Point(12, 117);
             this.btn_save.Name = "btn_save";
             this.btn_save.Size = new System.Drawing.Size(260, 39);
             this.btn_save.TabIndex = 6;
@@ -96,12 +99,40 @@
             this.btn_save.UseVisualStyleBackColor = true;
             this.btn_save.Click += new System.EventHandler(this.btn_save_Click);
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(12, 42);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(65, 13);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "Server port :";
+            // 
+            // txt_port
+            // 
+            this.txt_port.Location = new System.Drawing.Point(85, 38);
+            this.txt_port.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.txt_port.Name = "txt_port";
+            this.txt_port.Size = new System.Drawing.Size(187, 20);
+            this.txt_port.TabIndex = 9;
+            this.txt_port.Value = new decimal(new int[] {
+            22,
+            0,
+            0,
+            0});
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(286, 155);
+            this.ClientSize = new System.Drawing.Size(286, 173);
+            this.Controls.Add(this.txt_port);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.btn_save);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.txt_password);
@@ -114,6 +145,7 @@
             this.Name = "SettingsForm";
             this.Text = "Settings";
             this.Load += new System.EventHandler(this.SettingsForm_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.txt_port)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -128,5 +160,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txt_password;
         private System.Windows.Forms.Button btn_save;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.NumericUpDown txt_port;
     }
 }

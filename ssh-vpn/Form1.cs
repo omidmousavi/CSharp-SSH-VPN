@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using Renci.SshNet;
-using System.Management;
 
 namespace ssh_vpn
 {
@@ -21,7 +20,7 @@ namespace ssh_vpn
             InitializeComponent();
         }
 
-        SshClient sshClient = new SshClient("0.0.0.0","0000","0000");
+        SshClient sshClient = new SshClient("0.0.0.0",22,"0000","0000");
         ForwardedPortDynamic portForwarded = new ForwardedPortDynamic(9000);
 
         private void btnConnect_Click(object sender, EventArgs e)
@@ -33,14 +32,18 @@ namespace ssh_vpn
             string password = registery_get_data("password");
             string username = registery_get_data("username");
             string ip = registery_get_data("ip");
+            int port;
 
-            if (password == "" || password == "" || ip == "")
+            if (!int.TryParse(registery_get_data("port"), out port)) port = 22;
+
+            if (password == null || password == null || ip == null)
             {
                 MessageBox.Show("Error : You should set SSH server settings...", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                btnConnect.Text = "Connect";
                 return;
-            }          
+            }
 
-            sshClient = new SshClient(ip, username, password);
+            sshClient = new SshClient(ip, port, username, password);
 
             try
             {
@@ -96,7 +99,7 @@ namespace ssh_vpn
                 }
                 else
                 {
-                    btnConnect_Click(null, null);
+                    btnDisconnect_Click(null, null);
                 }
             }
         }
@@ -167,8 +170,8 @@ namespace ssh_vpn
             registry.SetValue("ProxyEnable", 1);
             registry.SetValue("ProxyServer", "socks5://127.0.0.1:9000");
 
-            WinINetInterop.InternetSetOption(IntPtr.Zero, WinINetInterop.INTERNET_OPTION_SETTINGS_CHANGED, IntPtr.Zero, 0);
-            WinINetInterop.InternetSetOption(IntPtr.Zero, WinINetInterop.INTERNET_OPTION_REFRESH, IntPtr.Zero, 0);
+            //WinINetInterop.InternetSetOption(IntPtr.Zero, WinINetInterop.INTERNET_OPTION_SETTINGS_CHANGED, IntPtr.Zero, 0);
+            //WinINetInterop.InternetSetOption(IntPtr.Zero, WinINetInterop.INTERNET_OPTION_REFRESH, IntPtr.Zero, 0);
         }
 
         private void unset_windows_proxy()

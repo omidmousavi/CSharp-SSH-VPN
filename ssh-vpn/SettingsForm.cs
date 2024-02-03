@@ -24,6 +24,7 @@ namespace ssh_vpn
             using (RegistryKey key = Registry.CurrentUser.CreateSubKey(keyName))
             {
                 key.SetValue("ip", txt_ip.Text);
+                key.SetValue("port", txt_port.Value);
                 key.SetValue("username", txt_username.Text);
                 key.SetValue("password", txt_password.Text);
 
@@ -39,6 +40,9 @@ namespace ssh_vpn
                 if (key != null)
                 {
                     txt_ip.Text = key.GetValue("ip") as string;
+                    int port = 22;
+                    if (int.TryParse(key.GetValue("port") as string, out port))
+                        txt_port.Value = port;
                     txt_username.Text = key.GetValue("username") as string;
                     txt_password.Text = key.GetValue("password") as string;
                 }

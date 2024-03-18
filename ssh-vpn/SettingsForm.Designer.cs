@@ -130,7 +130,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(286, 173);
+            this.ClientSize = new System.Drawing.Size(286, 172);
             this.Controls.Add(this.txt_port);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.btn_save);
@@ -140,6 +140,7 @@
             this.Controls.Add(this.txt_username);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txt_ip);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "SettingsForm";

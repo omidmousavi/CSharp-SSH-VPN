@@ -19,7 +19,7 @@ namespace ssh_vpn.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -73,9 +73,9 @@ namespace ssh_vpn.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap vpn_icon {
+        internal static System.Drawing.Bitmap gh1 {
             get {
-                object obj = ResourceManager.GetObject("vpn-icon", resourceCulture);
+                object obj = ResourceManager.GetObject("gh1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace ssh_vpn.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap vpn_icon_2 {
+        internal static System.Drawing.Bitmap vpn_icon {
             get {
-                object obj = ResourceManager.GetObject("vpn-icon-2", resourceCulture);
+                object obj = ResourceManager.GetObject("vpn-icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

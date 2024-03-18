@@ -43,9 +43,9 @@
             // 
             this.btnToggle.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnToggle.Font = new System.Drawing.Font("Microsoft YaHei", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnToggle.Location = new System.Drawing.Point(12, 14);
+            this.btnToggle.Location = new System.Drawing.Point(12, 12);
             this.btnToggle.Name = "btnToggle";
-            this.btnToggle.Size = new System.Drawing.Size(260, 83);
+            this.btnToggle.Size = new System.Drawing.Size(260, 73);
             this.btnToggle.TabIndex = 0;
             this.btnToggle.Text = "Connect";
             this.btnToggle.UseVisualStyleBackColor = true;
@@ -66,9 +66,9 @@
             // 
             this.btnOpenSettings.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnOpenSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F);
-            this.btnOpenSettings.Location = new System.Drawing.Point(73, 178);
+            this.btnOpenSettings.Location = new System.Drawing.Point(73, 161);
             this.btnOpenSettings.Name = "btnOpenSettings";
-            this.btnOpenSettings.Size = new System.Drawing.Size(199, 51);
+            this.btnOpenSettings.Size = new System.Drawing.Size(199, 52);
             this.btnOpenSettings.TabIndex = 1;
             this.btnOpenSettings.Text = "Open Settings";
             this.btnOpenSettings.UseVisualStyleBackColor = true;
@@ -81,6 +81,7 @@
             // 
             // notifyIcon1
             // 
+            this.notifyIcon1.BalloonTipText = "SSH VPN Disconected...";
             this.notifyIcon1.Text = "SSH VPN NOTIF";
             this.notifyIcon1.Visible = true;
             // 
@@ -90,23 +91,24 @@
             this.lblStatus.Cursor = System.Windows.Forms.Cursors.Default;
             this.lblStatus.Font = new System.Drawing.Font("Microsoft YaHei", 14.25F);
             this.lblStatus.ForeColor = System.Drawing.SystemColors.Control;
-            this.lblStatus.Location = new System.Drawing.Point(12, 100);
+            this.lblStatus.Location = new System.Drawing.Point(12, 91);
             this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(260, 75);
+            this.lblStatus.Size = new System.Drawing.Size(260, 64);
             this.lblStatus.TabIndex = 6;
             this.lblStatus.Text = "Not Connected";
             this.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btnGh
             // 
-            this.btnGh.BackColor = System.Drawing.SystemColors.ControlText;
-            this.btnGh.BackgroundImage = global::ssh_vpn.Properties.Resources.gh;
+            this.btnGh.BackColor = System.Drawing.SystemColors.Desktop;
+            this.btnGh.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGh.BackgroundImage")));
             this.btnGh.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnGh.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnGh.FlatAppearance.BorderSize = 0;
-            this.btnGh.Location = new System.Drawing.Point(12, 178);
+            this.btnGh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGh.Location = new System.Drawing.Point(12, 161);
             this.btnGh.Name = "btnGh";
-            this.btnGh.Size = new System.Drawing.Size(55, 51);
+            this.btnGh.Size = new System.Drawing.Size(55, 52);
             this.btnGh.TabIndex = 5;
             this.btnGh.UseVisualStyleBackColor = false;
             this.btnGh.Click += new System.EventHandler(this.btnGh_Click);
@@ -116,7 +118,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(281, 241);
+            this.ClientSize = new System.Drawing.Size(283, 227);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.btnGh);
             this.Controls.Add(this.btnOpenSettings);

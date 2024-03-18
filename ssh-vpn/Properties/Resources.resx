@@ -124,7 +124,7 @@
   <data name="vpn-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\vpn-icon.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="vpn-icon-2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\vpn-icon-2.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="gh1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\gh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

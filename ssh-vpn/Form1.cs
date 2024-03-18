@@ -82,28 +82,19 @@ namespace ssh_vpn
         {
             btnToggle.Text = "Disconnecting...";
 
-            ThreadPool.QueueUserWorkItem(new WaitCallback((state) =>
-            {
-                portForwarded.Stop();
-                sshClient.Disconnect();
-                unset_windows_proxy();
+            portForwarded.Stop();
+            sshClient.Disconnect();
+            unset_windows_proxy();
 
-                Invoke((MethodInvoker)delegate
-                {
-                    btnToggle.Text = "Connect";
-                    lblStatus.BackColor = Color.Red;
-                    lblStatus.Text = "Not Connected";
+            btnToggle.Text = "Connect";
+            lblStatus.BackColor = Color.Red;
+            lblStatus.Text = "Not Connected";
 
-                    timer_check_status.Enabled = false;
-                    timer_check_status.Stop();
-                    seconds = 0;
+            timer_check_status.Enabled = false;
+            timer_check_status.Stop();
+            seconds = 0;
 
-                    btnToggle.Enabled = true;
-                });
-
-
-            }));
-
+            btnToggle.Enabled = true;
         }
 
 
@@ -118,7 +109,6 @@ namespace ssh_vpn
             else Connect();
 
             Cursor.Current = Cursors.Default;
-
         }
 
 
@@ -130,14 +120,13 @@ namespace ssh_vpn
             if (result == DialogResult.No)
                 e.Cancel = true;
             else
-                btnToggle_Click(null, null);
+                Disconnect();
 
         }
         private void SystemEvents_SessionEnding(object sender, SessionEndingEventArgs e)
         {
             if (sshClient.IsConnected)
                 btnToggle_Click(null, null);
-
 
             Application.Exit();
         }
@@ -148,15 +137,33 @@ namespace ssh_vpn
             settingsForm.ShowDialog();
         }
 
+        bool back_status = false;
         int seconds = 0;
         private void timer_check_status_Tick(object sender, EventArgs e)
         {
-            seconds++;
+            if (!sshClient.IsConnected && sshClient.IsConnected != back_status)
+            {
+                Disconnect();
 
-            int hours = seconds / 3600;
-            int minutes = (seconds % 3600) / 60;
-            int remainingSeconds = seconds % 60;
-            lblStatus.Text = "Connected      " + hours.ToString("D2") + ":" + minutes.ToString("D2") + ":" + remainingSeconds.ToString("D2");
+                notifyIcon1.Icon = SystemIcons.Warning;
+                notifyIcon1.ShowBalloonTip(10);
+            }
+            else if (sshClient.IsConnected && sshClient.IsConnected != back_status)
+            {
+                seconds = 0;
+                lblStatus.Text = "Connected      00:00:00";
+            }
+            else if (sshClient.IsConnected)
+            { 
+                seconds++;
+
+                int hours = seconds / 3600;
+                int minutes = (seconds % 3600) / 60;
+                int remainingSeconds = seconds % 60;
+                lblStatus.Text = "Connected      " + hours.ToString("D2") + ":" + minutes.ToString("D2") + ":" + remainingSeconds.ToString("D2");
+            }
+
+            back_status = sshClient.IsConnected;
         }
 
         private void set_windows_proxy()

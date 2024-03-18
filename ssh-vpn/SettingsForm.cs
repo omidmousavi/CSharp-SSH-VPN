@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Win32;
 
@@ -37,15 +30,17 @@ namespace ssh_vpn
             string keyName = "ssh_vpn";
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey(keyName))
             {
-                if (key != null)
-                {
-                    txt_ip.Text = key.GetValue("ip") as string;
-                    int port = 22;
-                    if (int.TryParse(key.GetValue("port") as string, out port))
-                        txt_port.Value = port;
-                    txt_username.Text = key.GetValue("username") as string;
-                    txt_password.Text = key.GetValue("password") as string;
-                }
+                if (key == null) return;
+                int port = 22;
+
+                txt_ip.Text = key.GetValue("ip") as string;
+
+                if (int.TryParse(key.GetValue("port") as string, out port))
+                    txt_port.Value = port;
+               
+
+                txt_username.Text = key.GetValue("username") as string;
+                txt_password.Text = key.GetValue("password") as string;
             }
         }
     }

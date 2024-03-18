@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
+using System.Threading;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using Renci.SshNet;
+
 
 namespace ssh_vpn
 {
@@ -11,16 +14,16 @@ namespace ssh_vpn
         public Form1()
         {
             InitializeComponent();
+            SystemEvents.SessionEnding += new SessionEndingEventHandler(SystemEvents_SessionEnding);
         }
 
-        SshClient sshClient = new SshClient("0.0.0.0",22,"0000","0000");
+        SshClient sshClient = new SshClient("0.0.0.0", 22, "0000", "0000");
         ForwardedPortDynamic portForwarded = new ForwardedPortDynamic(9000);
 
-        private void btnConnect_Click(object sender, EventArgs e)
+
+        void Connect()
         {
-            Cursor.Current = Cursors.WaitCursor;
-            
-            btnConnect.Text = "Connecting...";
+            btnToggle.Text = "Connecting...";
 
             string password = registery_get_data("password");
             string username = registery_get_data("username");
@@ -32,121 +35,128 @@ namespace ssh_vpn
             if (password == "" || password == "" || username == "" || ip == "")
             {
                 MessageBox.Show("Error : You should set SSH server settings...", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                btnConnect.Text = "Connect";
+                Invoke((MethodInvoker)delegate
+                {
+                    btnOpenSettings_Click(null, null);
+                    btnToggle.Text = "Connect";
+                });
                 return;
             }
 
-            sshClient = new SshClient(ip, port, username, password);
 
-            try
+            ThreadPool.QueueUserWorkItem(new WaitCallback((state) =>
             {
-                sshClient.Connect();
-                sshClient.AddForwardedPort(portForwarded);
-                portForwarded.Start();
+                sshClient = new SshClient(ip, port, username, password);
 
-                set_windows_proxy();
+                try
+                {
+                    sshClient.Connect();
+                    sshClient.AddForwardedPort(portForwarded);
+                    portForwarded.Start();
 
-                Cursor.Current = Cursors.Default;
+                    set_windows_proxy();
 
-                btnDisconnect.Enabled = true;
-                btnConnect.Enabled = false;
+                    Invoke((MethodInvoker)delegate
+                    {
+                        lblStatus.BackColor = Color.Green;
+                        lblStatus.Text = "Connected      00:00:00";
+                        btnToggle.Text = "Disconnect";
 
-                pnlStatus.BackColor = Color.Green;
-                lblStatus.Text = "   Connected";
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error : " + ex.Message, "Connecton Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                btnConnect.Text = "Connect";
-            }
+                        timer_check_status.Enabled = true;
+                        timer_check_status.Start();
+                    });
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error : " + ex.Message, "Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Invoke((MethodInvoker)delegate { btnToggle.Text = "Connect"; });
+                }
+                finally
+                {
+                    Invoke((MethodInvoker)delegate { btnToggle.Enabled = true; });
+                }
+            }));
         }
 
-        private void btnDisconnect_Click(object sender, EventArgs e)
+        void Disconnect()
         {
-            Cursor.Current = Cursors.WaitCursor;
+            btnToggle.Text = "Disconnecting...";
 
-            portForwarded.Stop();
-            sshClient.Disconnect();
-
-            btnConnect.Text = "Connect";
-
-            unset_windows_proxy();
-
-            btnConnect.Enabled = true;
-            btnDisconnect.Enabled = false;
-
-            pnlStatus.BackColor = Color.Red;
-            lblStatus.Text = "Not connected";
-
-            Cursor.Current = Cursors.Default;
-        }
-
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (sshClient.IsConnected)
-            {
-                var result = MessageBox.Show("Do you want to exit? If you click on yes, the VPN will be disconnected...", "Exit Program?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (result == DialogResult.No)
-                    e.Cancel = true;
-                else
-                    btnDisconnect_Click(null, null);
-            }
-        }
-
-        private void opensettingsform_Click(object sender, EventArgs e)
-        {
-            SettingsForm SettingsForm = new SettingsForm();
-            SettingsForm.Show();
-        }
-
-        private void githubLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            githubLink.LinkVisited = true;
-            githubLink.LinkBehavior = LinkBehavior.HoverUnderline;
-            githubLink.Links[0].LinkData = "https://github.com/omidmousavi/csharp-ssh-vpn";
-            System.Diagnostics.Process.Start(githubLink.Links[0].LinkData.ToString());
-        }
-
-        bool back_status = false;
-        int seconds = 0;
-        private void timer_check_status_Tick(object sender, EventArgs e)
-        {
-            if (!sshClient.IsConnected && sshClient.IsConnected != back_status)
+            ThreadPool.QueueUserWorkItem(new WaitCallback((state) =>
             {
                 portForwarded.Stop();
                 sshClient.Disconnect();
-
                 unset_windows_proxy();
 
-                btnConnect.Enabled = true;
-                btnDisconnect.Enabled = false;
+                Invoke((MethodInvoker)delegate
+                {
+                    btnToggle.Text = "Connect";
+                    lblStatus.BackColor = Color.Red;
+                    lblStatus.Text = "Not Connected";
 
-                pnlStatus.BackColor = Color.Red;
-                lblStatus.Text = "Not connected";
+                    timer_check_status.Enabled = false;
+                    timer_check_status.Stop();
+                    seconds = 0;
 
-                btnConnect.Text = "Connect";
+                    btnToggle.Enabled = true;
+                });
 
-                notifyIcon1.BalloonTipText = "SSH VPN Disconected...";
-                notifyIcon1.BalloonTipTitle = "";
-                notifyIcon1.Icon = SystemIcons.Warning;
-                notifyIcon1.ShowBalloonTip(10);
-            }
-            else if (sshClient.IsConnected && sshClient.IsConnected != back_status)
-            {
-                seconds = 0;
-                btnConnect.Text = "00:00:00";
-            }
-            else if (sshClient.IsConnected)
-            {
-                seconds++;
 
-                int hours = seconds / 3600;
-                int minutes = (seconds % 3600) / 60;
-                int remainingSeconds = seconds % 60;
-                btnConnect.Text = hours.ToString("D2") + ":" + minutes.ToString("D2") + ":" + remainingSeconds.ToString("D2");
-            }
+            }));
 
-            back_status = sshClient.IsConnected;
+        }
+
+
+        private void btnToggle_Click(object sender, EventArgs e)
+        {
+            btnToggle.Enabled = false;
+            Cursor.Current = Cursors.WaitCursor;
+
+            if (sshClient.IsConnected)
+                Disconnect();
+
+            else Connect();
+
+            Cursor.Current = Cursors.Default;
+
+        }
+
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!sshClient.IsConnected) return;
+
+            DialogResult result = MessageBox.Show("Do you really wish to exit? the connection will be stopped.", "Exit Program?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.No)
+                e.Cancel = true;
+            else
+                btnToggle_Click(null, null);
+
+        }
+        private void SystemEvents_SessionEnding(object sender, SessionEndingEventArgs e)
+        {
+            if (sshClient.IsConnected)
+                btnToggle_Click(null, null);
+
+
+            Application.Exit();
+        }
+
+        private void btnOpenSettings_Click(object sender, EventArgs e)
+        {
+            SettingsForm settingsForm = new SettingsForm();
+            settingsForm.ShowDialog();
+        }
+
+        int seconds = 0;
+        private void timer_check_status_Tick(object sender, EventArgs e)
+        {
+            seconds++;
+
+            int hours = seconds / 3600;
+            int minutes = (seconds % 3600) / 60;
+            int remainingSeconds = seconds % 60;
+            lblStatus.Text = "Connected      " + hours.ToString("D2") + ":" + minutes.ToString("D2") + ":" + remainingSeconds.ToString("D2");
         }
 
         private void set_windows_proxy()
@@ -174,8 +184,13 @@ namespace ssh_vpn
                 if (key == null)
                     return "";
                 else
-                    return key.GetValue(name) as string;                    
-            }            
+                    return key.GetValue(name) as string;
+            }
+        }
+
+        private void btnGh_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/omidmousavi/csharp-ssh-vpn");
         }
     }
 

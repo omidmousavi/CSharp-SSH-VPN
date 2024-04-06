@@ -11,6 +11,10 @@ A program to use SSH protocol as a VPN, it works simply by start SSH session on 
 | V 1.0.0 | [Donwload](https://github.com/omidmousavi/csharp-ssh-vpn/raw/master/ssh-vpn/bin/Debug/v1.0.0.rar) |
 | V 2.0.0 | [Donwload](https://github.com/omidmousavi/csharp-ssh-vpn/raw/master/ssh-vpn/bin/Debug/v2.0.0.rar) |
 
+## Ignored hosts :
+You can add this ignored host list to your proxy setting. it is suggested to use for more security and better performance...
+[Click to see](https://github.com/omidmousavi/CSharp-SSH-VPN/blob/master/ssh-vpn/ignored-host.txt)
+
 ## How to buy server :
 https://github.com/iranxray/hope/blob/main/buy-server.md
 

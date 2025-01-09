@@ -1,3 +1,6 @@
+> [!IMPORTANT]  
+> Be voice of <b>#Segaro</b> and <b>#YousefGhobadi</b>
+
 ## Description : 
 A program to use SSH protocol as a VPN, it works simply by start SSH session on port 9000 and set local ip in windows proxy...
 
@@ -17,6 +20,9 @@ You can add this ignored host list to your proxy setting. it is suggested to use
 
 ## How to buy server :
 https://github.com/iranxray/hope/blob/main/buy-server.md
+
+## How to config server (With Segaro) :
+https://telegra.ph/How-to-create-a-user-and-use-SSH-Proxy-with-iSegaro-07-07
 
 ## Learn more about filtering...
 https://github.com/iranxray/hope

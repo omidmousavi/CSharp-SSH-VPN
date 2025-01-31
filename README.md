@@ -1,6 +1,3 @@
-> [!IMPORTANT]  
-> Be voice of <b>#YousefGhobadi</b>
-
 ## Description : 
 A program to use SSH protocol as a VPN, it works simply by start SSH session on port 9000 and set local ip in windows proxy...
 
